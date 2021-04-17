@@ -1,13 +1,15 @@
-import subprocess
+import subprocess, colorama
 
+from colorama import Fore,Back,Style
+colorama.init(autoreset=True)
 
-def searchForFind(string):
+def searchForReply(string):
     return string.find('Reply')
 
-def eachLineSearch(array):
+def isReplyInLine(array):
 
     for string in array:
-        index = searchForFind(string)
+        index = searchForReply(string)
 
         if index != -1:
             return True
@@ -15,8 +17,10 @@ def eachLineSearch(array):
     return False
 
 def commandToArray(command):
-    process= subprocess.run(command.split(' '), capture_output=True)
-    output = process.stdout
+    command = command.split(' ')
+
+    output = subprocess.run(command, capture_output=True)
+    output = output.stdout
     output = output.decode("utf-8") 
     output = output.split('\r\n')
 
@@ -25,18 +29,24 @@ def commandToArray(command):
 def standby():
     enter = input('')
 
+def printGREEN(string):
+    print(f"{Fore.GREEN}{string}")
+
+def printRED(string):
+    print(f"{Fore.RED}{string}")
+
 def conditionalDisplay(booleanCondition):
     if booleanCondition == True:
-        print('Connected to Internet')
+        printGREEN('Connected to Internet')
         return
 
-    print('Not Connected To Internet Yet')
+    printRED('Not Connected To Internet Yet')
 
 def main():
 
     command = "ping youtube.com"
     array = commandToArray(command)
-    condition = eachLineSearch(array)
+    condition = isReplyInLine(array)
     conditionalDisplay(condition)
 
     standby()
