@@ -3,13 +3,10 @@ import subprocess, colorama
 from colorama import Fore,Back,Style
 colorama.init(autoreset=True)
 
-def searchForReply(string):
-    return string.find('Reply')
-
 def isReplyInLine(array):
 
     for string in array:
-        index = searchForReply(string)
+        index = string.find('Reply')
 
         if index != -1:
             return True
